@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: url
+    username: username
+    password: password
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+    generate-ddl: true
+
+  sql:
+    init:
+      mode: always
+  application:
+    name: so1s-api-server
+
+  servlet:
+    multipart:
+      max-file-size: 100GB
+      max-request-size: 100GB
+
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          filter: DEBUG
+      hibernate:
+        SQL=DEBUG:
