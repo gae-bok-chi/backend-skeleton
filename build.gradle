@@ -34,6 +34,13 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+	// Json Logging Configuration
+	implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
+	implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
+	implementation 'ch.qos.logback:logback-classic'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 dependencyManagement {
