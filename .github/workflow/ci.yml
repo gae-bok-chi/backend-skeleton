@@ -1,0 +1,43 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      ## gradle test
+      - name: Test with Gradle
+        run: ./gradlew test --stacktrace
+
+      ## gradle build
+      - name: Build with Gradle
+        run: ./gradlew bootJar --stacktrace -x test
+
+      ## 웹 이미지 빌드 및 도커허브에 push
+      - name: web docker build and push
+        run: |
+          sudo apt update
+          sudo apt install -y wget
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+          export APPLICATION_NAME=$(yq e '.spring.application.name' ./src/main/resources/application.yml)
+          export VERSION=$(awk '/version =/{print $NF}' build.gradle | tr -d "'")
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/$APPLICATION_NAME:$VERSION .
+          docker push ${{ secrets.DOCKER_USERNAME }}/$APPLICATION_NAME:$VERSION
