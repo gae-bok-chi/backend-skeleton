@@ -19,7 +19,7 @@ spring:
     generate-ddl: true
 
   application:
-    name: gaebokchi-servicename
+    name: backend-skeleton-service
 
 logging:
   level:
